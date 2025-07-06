@@ -26,7 +26,7 @@ public class loginController {
         String promptPassword = passwordField.getText();
         boolean successfulLogin = false;
 
-        try(BufferedReader readInfo = new BufferedReader(new FileReader("info.txt"))){
+        try(BufferedReader readInfo = new BufferedReader(new FileReader("usernames.txt"))){
             while((line = readInfo.readLine()) != null){
                 if(line.equals(promptUsername + ":" + promptPassword)){
                     successfulLogin = true;
@@ -58,7 +58,7 @@ public class loginController {
 
     public void handleRegister(ActionEvent event) {
         try {
-            FXMLLoader registerLoader = new FXMLLoader(getClass().getResource("register-view.fxml"));
+            FXMLLoader registerLoader = new FXMLLoader(getClass().getResource("registerView.fxml"));
             Scene scene = new Scene(registerLoader.load(), 320, 240);
             Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.setScene(scene);
