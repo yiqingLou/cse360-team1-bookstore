@@ -1,4 +1,4 @@
-package p2.demo;
+package bookstore;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
