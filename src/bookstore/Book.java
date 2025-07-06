@@ -15,7 +15,6 @@ public class Book {
         this.price = price;
     }
 
-    // getters/setters 省略
     public String getTitle() { return title; }
     public String getAuthor() { return author; }
     public String getCategory() { return category; }
