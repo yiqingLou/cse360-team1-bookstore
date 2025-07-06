@@ -1,0 +1,25 @@
+Data Structures,Smith,12.50,Worn,CSE360
+Java Programming,Lee,9.99,Acceptable,CSE205
+Python Crash Course,Eric,13.75,Used,CSE110
+Intro to Algorithms,Thomas,15.00,New,CSE310
+Data Structures,Smith,12.50,Worn,CSE360
+Java Programming,Lee,9.99,Acceptable,CSE205
+Python Crash Course,Eric,13.75,Used,CSE110
+Intro to Algorithms,Thomas,15.00,New,CSE310
+Magic Math,Alger,33.00,New,MAT390
+Magic Math,Alger,23.00,Worn,MAT390
+Advanced Algorithms,Klein,25.99,New,CSE310
+Design Patterns,GoF,18.75,Acceptable,CSE470
+Database Systems,Garcia,21.40,Used,CSE412
+Operating Systems,Tanenbaum,16.20,Worn,CSE330
+Artificial Intelligence,Russell,35.00,New,CSE471
+Human-Computer Interaction,Preece,12.90,Worn,CSE340
+Web Development,Bates,9.99,Acceptable,CSE205
+Computer Networks,Kurose,27.35,Used,CSE434
+Discrete Math,Epp,10.00,Acceptable,CSE240
+Computer Security,Stallings,22.50,New,CSE365
+Mobile App Design,Benson,14.20,Used,CSE455
+Ethical Hacking,Harris,19.75,Worn,CSE465
+Quantum Computing,Nielsen,39.95,New,CSE498
+UX Design,Norman,11.60,Acceptable,CSE320
+Data Mining,Han,24.99,Used,CSE450
