@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="bookstore.loginController"
+            prefWidth="400" prefHeight="300"
+            style="-fx-background-color: white;">
+
+    <!-- Login Box -->
+    <AnchorPane fx:id="loginBox"
+                layoutX="40" layoutY="20"
+                prefWidth="320" prefHeight="260"
+                style="-fx-background-color: #F5F5F5;
+                       -fx-border-radius: 20; -fx-background-radius: 20;
+                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);">
+
+        <Label text="Sun Devil Books"
+               layoutX="100" layoutY="10"
+               style="-fx-text-fill: maroon; -fx-font-size: 16px; -fx-font-weight: bold;" />
+
+        <Label text="Username"
+               layoutX="40" layoutY="60"
+               style="-fx-font-size: 12px;" />
+        <TextField fx:id="usernameField"
+                   layoutX="40" layoutY="80"
+                   prefWidth="240" />
+
+        <Label text="Password"
+               layoutX="40" layoutY="120"
+               style="-fx-font-size: 12px;" />
+        <PasswordField fx:id="passwordField"
+                       layoutX="40" layoutY="140"
+                       prefWidth="240" />
+
+        <Button text="Submit"
+                layoutX="120" layoutY="180"
+                onAction="#handleSubmit"
+                style="-fx-background-color: #800000; -fx-text-fill: white; -fx-font-weight:40; -fx-font-size: 14px;"/>
+
+        <Button text="Register"
+               layoutX="120" layoutY="230"
+                onAction="#handleRegister"
+                style="-fx-background-color: #800000;-fx-text-fill: white; -fx-font-weight:40; -fx-font-size: 14px;" />
+    </AnchorPane>
+
+</AnchorPane>

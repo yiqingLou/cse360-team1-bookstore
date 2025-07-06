@@ -1,0 +1,10 @@
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="bookstore.BookManagerController"
+            prefWidth="500" prefHeight="400" style="-fx-background-color: white;">
+    <Label layoutX="30" layoutY="20" text="Add Book" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    <TextField fx:id="titleField" layoutX="30" layoutY="60" promptText="Title" prefWidth="200"/>
+    <TextField fx:id="authorField" layoutX="250" layoutY="60" promptText="Author" prefWidth="200"/>
+    <ComboBox fx:id="categoryBox" layoutX="30" layoutY="100" promptText="Category" prefWidth="200"/>
+    <ComboBox fx:id="conditionBox" layoutX="250" layoutY="100" promptText="Condition" prefWidth="200"/>
+    <Button layoutX="400" layoutY="140" text="Add Book" onAction="#handleAddBook"/>
+    <ListView fx:id="bookListView" layoutX="30" layoutY="180" prefWidth="420" prefHeight="180"/>
+</AnchorPane>
