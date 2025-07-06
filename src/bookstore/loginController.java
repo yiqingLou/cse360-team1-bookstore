@@ -49,7 +49,7 @@ public class loginController {
     }
 
     public void loadBookstore() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BuyersView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BuyerView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         Stage stage = (Stage) usernameField.getScene().getWindow();
         stage.setScene(scene);
