@@ -1,4 +1,4 @@
-package application;
+package bookstore;
 
 
 import javafx.application.Application;
