@@ -97,11 +97,11 @@ private Stage primaryStage;
 			BView();	
 		});
 		
-		/*sell.setOnAction(e ->{
-			Seller_View sellerView = new Seller_View();
-			sellerView.start(primaryStage);
+		sell.setOnAction(e ->{
+			SellerView sellerView = new SellerView();
+			sellerView.start(new Stage());
 			
-		});*/
+		});
 		
 		checkout1.setOnAction(e ->{
 			Checkout_View checkoutView = new Checkout_View(cart);
