@@ -1,4 +1,4 @@
-package application;
+package bookstore;
 
 
 import javafx.application.Application;
@@ -99,7 +99,7 @@ private Stage primaryStage;
 		
 		sell.setOnAction(e ->{
 			SellerView sellerView = new SellerView();
-			sellerView.start(new Stage());
+			sellerView.show(primaryStage, null);
 			
 		});
 		
@@ -212,7 +212,6 @@ private Stage primaryStage;
 			});
 			//sort();
 			listbookssorted();
-			
 		});
 		
 		VBox filters = new VBox(10, sortby, sortbyops,
@@ -385,6 +384,8 @@ private void listbookssorted(){
 	
 	
 	
-	public static void main(String[] args){ launch(args);}
+	public static void main(String[] args){ 
+		launch(args);
+		}
 	
 }
