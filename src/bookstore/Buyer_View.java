@@ -93,23 +93,26 @@ private Stage primaryStage;
 		logout.getStyleClass().add("buttons");
 		checkout1.getStyleClass().add("buttons");
 		
-		/*buy.setOnAction(e ->{
-			BView();
-			
+		buy.setOnAction(e ->{
+			BView();	
 		});
 		
-		sell.setOnAction(e ->{
-			SView();
+		/*sell.setOnAction(e ->{
+			Seller_View sellerView = new Seller_View();
+			sellerView.start(primaryStage);
 			
-		});
+		});*/
+		
 		checkout1.setOnAction(e ->{
-			CheckoutPage();
+			Checkout_View checkoutView = new Checkout_View(cart);
+			checkoutView.start(new Stage());
 			
 		});
 		logout.setOnAction(e ->{
-			Logout();
+			primaryStage.close();
 			
-		}); */
+		}); 
+		
 		search.setOnAction(e ->{
 			filteredBooks.setPredicate(book ->{
 				
