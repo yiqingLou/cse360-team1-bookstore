@@ -17,7 +17,7 @@ public class Main extends Application {
             admin.start(new Stage());
         });
 
-        root.getChildren().addAll(adminBtn); // 你可以加 buyer/seller 入口
+        root.getChildren().addAll(adminBtn); 
         Scene scene = new Scene(root, 400, 300);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Bookstore Main Menu");
