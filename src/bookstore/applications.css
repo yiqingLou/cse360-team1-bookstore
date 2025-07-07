@@ -1,0 +1,78 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.navbar{
+	-fx-background-color: #660000;	
+}
+
+.buttons{
+	-fx-background-color: #660000;
+	-fx-text-fill: #ffffff;
+	-fx-font-weight: bold;	
+	-fx-padding: 8px;
+	-fx-pref-width: 100;
+}
+
+.logo{
+	-fx-text-fill: #660000;
+	-fx-font-weight: bold;
+	-fx-font-size: 18px;
+}
+
+.buttons:hover{
+	-fx-background-color: #990000;
+}
+.buttons:pressed{
+	-fx-background-color: #440000;
+}
+
+.searchbar{
+	-fx-background-color: #ffffff;
+	-fx-border-radius: 5;
+	-fx-border-color: #cccccc;
+	-fx-background-radius: 5;
+	-fx-pref-width: 920px;
+	-fx-padding: 8px;
+}
+
+.sortbyops{
+	-fx-background-color: white;
+	-fx-text-fill: black;
+	-fx-border-color: black;
+	-fx-border-width: 1;
+	-fx-background-radius: 5;
+	-fx-font-size: 12px;
+	-fx-padding: 8px;
+	-fx-spacing: 30;
+	-fx-alignment: center;
+	-fx-pref-width: 300px;
+}
+
+.status{
+	-fx-text-fill: #660000;
+	-fx-font-weight: bold;
+	-fx-font-size: 14px;
+}
+
+.filters{
+	-fx-background-color: white;
+	-fx-text-fill: black;
+	-fx-border-color: black;
+	-fx-border-width: 1;
+	-fx-background-radius: 5;
+	-fx-font-size: 14px;
+	-fx-padding: 8px;
+	-fx-spacing: 40;
+	-fx-alignment: center;
+}
+
+.bookcard{
+	-fx-background-color: white;
+	-fx-text-fill: black;
+	-fx-border-color: black;
+	-fx-border-width: 1;
+	-fx-background-radius: 5;
+	-fx-padding: 8px;
+	-fx-spacing: 40;
+	-fx-pref-width: 200px;
+	-fx-pref-height: 200px;
+}
