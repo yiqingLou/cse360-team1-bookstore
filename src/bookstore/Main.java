@@ -1,6 +1,38 @@
 package bookstore;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+/*public class Main extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("BookManagerView.fxml"));
+        Scene scene = new Scene(loader.load(), 600, 400);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Book Management");
+        primaryStage.show();
+    } */
+    
+    public class Main extends Application {
+        @Override
+        public void start(Stage primaryStage) throws Exception {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("loginView.fxml"));
+            Scene scene = new Scene(loader.load(), 600, 400);
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Login");
+            primaryStage.show();
+        }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+
+/*package bookstore;
+
+import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -28,3 +60,4 @@ public class Main extends Application {
         launch(args);
     }
 }
+*/
