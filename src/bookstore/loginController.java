@@ -49,11 +49,11 @@ public class loginController {
     }
 
     public void loadBookstore() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BuyerView.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BuyerView.fxml"));
+        //Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         Stage stage = (Stage) usernameField.getScene().getWindow();
-        stage.setScene(scene);
-        stage.setTitle("Book Store");
+        Buyer_View buyerView = new Buyer_View();
+        buyerView.start(stage);
     }
 
     public void handleRegister(ActionEvent event) {
