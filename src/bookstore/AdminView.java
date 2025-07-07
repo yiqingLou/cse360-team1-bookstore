@@ -11,7 +11,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+<<<<<<< HEAD
 import javafx.fxml.FXMLLoader;
+=======
+>>>>>>> 3236a78a72db3b0f08e8d3a75e39904625e72d98
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -44,9 +47,11 @@ public class AdminView {
         title.setFont(Font.font("Arial", 16));
         title.setTextFill(Color.GOLD);
 
+
         Button manageBooksBtn = new Button("Manage Books");
         manageBooksBtn.setStyle("-fx-background-color: #FFD700; -fx-border-radius: 5; -fx-background-radius: 5;");
         manageBooksBtn.setOnAction(e -> openBookManager(new Stage()));
+
 
         Label dateLabel = new Label("Date Range:");
         dateLabel.setTextFill(Color.GOLD);
@@ -55,7 +60,11 @@ public class AdminView {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
+
         top.getChildren().addAll(logo, title, manageBooksBtn, spacer, dateLabel, picker, logout);
+
+        top.getChildren().addAll(logo, title, spacer, dateLabel, picker, logout);
+
         root.setTop(top);
 
         initUsers();
@@ -90,8 +99,13 @@ public class AdminView {
         toggles.setAlignment(Pos.CENTER);
         toggles.setPadding(new Insets(10));
         toggles.getChildren().addAll(toggleBox("Allow New Accounts", accounts),
+<<<<<<< HEAD
                 toggleBox("Allow New Listings", listings),
                 toggleBox("Allow Purchases", purchases));
+=======
+                                     toggleBox("Allow New Listings", listings),
+                                     toggleBox("Allow Purchases", purchases));
+>>>>>>> 3236a78a72db3b0f08e8d3a75e39904625e72d98
         toggles.setStyle("-fx-background-color: #B0B0B0; -fx-border-color: black; -fx-border-width: 1px;");
 
         HBox bottom = new HBox(10);
@@ -123,6 +137,7 @@ public class AdminView {
         stage.show();
     }
 
+<<<<<<< HEAD
     private void openBookManager(Stage stage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("BookManagerView.fxml"));
@@ -135,6 +150,8 @@ public class AdminView {
         }
     }
 
+=======
+>>>>>>> 3236a78a72db3b0f08e8d3a75e39904625e72d98
     void initUsers() {
         TableColumn<UserRecord, String> name = new TableColumn<>("Username");
         name.setCellValueFactory(new PropertyValueFactory<>("username"));
