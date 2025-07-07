@@ -40,6 +40,9 @@ public class SellerView {
         conditionBox.getItems().addAll("New", "Like New", "Good", "Acceptable");
         conditionBox.setPromptText("Condition");
 
+        TextField departmentField = new TextField();
+        departmentField.setPromptText("Department (e.g., CSE)");
+
         Button listButton = new Button("List Book");
         listButton.setOnAction(e -> {
             try {
@@ -47,9 +50,10 @@ public class SellerView {
                 String authorText = authorField.getText();
                 double originalPrice = Double.parseDouble(priceField.getText());
                 String condition = conditionBox.getValue();
+                String department = departmentField.getText();
 
                 double finalPrice = calculateFinalPrice(originalPrice, condition);
-                Book book = new Book(titleText, authorText, finalPrice, condition);
+                Book book = new Book(titleText, authorText, finalPrice, condition + " | Dept: " + department);
                 listedBooks.add(book);
                 updateBookList();
                 updateEarnings();
@@ -58,6 +62,7 @@ public class SellerView {
                 authorField.clear();
                 priceField.clear();
                 conditionBox.setValue(null);
+                departmentField.clear();
             } catch (Exception ex) {
                 showAlert("Error", "Please fill all fields correctly.");
             }
@@ -74,7 +79,9 @@ public class SellerView {
         form.add(priceField, 1, 2);
         form.add(new Label("Condition:"), 0, 3);
         form.add(conditionBox, 1, 3);
-        form.add(listButton, 1, 4);
+        form.add(new Label("Department:"), 0, 4);
+        form.add(departmentField, 1, 4);
+        form.add(listButton, 1, 5);
 
         // Book Listings Section
         ScrollPane bookScroll = new ScrollPane(bookListDisplay);
@@ -88,7 +95,7 @@ public class SellerView {
         // Assemble everything
         root.getChildren().addAll(title, form, new Label("Your Listings:"), bookScroll, earningsLabel, backButton);
 
-        Scene scene = new Scene(root, 600, 700);
+        Scene scene = new Scene(root, 600, 750);
         stage.setScene(scene);
         stage.setTitle("Seller View");
         stage.show();
