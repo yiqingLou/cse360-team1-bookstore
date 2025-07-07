@@ -13,183 +13,189 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AdminView {
-    private TableView<UserRecord> userTable = new TableView<>();
-    private TableView<TransactionRecord> transactionTable = new TableView<>();
-    private ToggleButton accountsToggle = makeToggle();
-    private ToggleButton listingsToggle = makeToggle();
-    private ToggleButton purchasesToggle = makeToggle();
-    private Label statusLight = new Label("●");
-    private Label clockLabel = new Label();
-    private Label activeUserCountLabel = new Label();
-    private LineChart<String, Number> salesLineChart;
-    private BarChart<String, Number> barChart;
+    TableView<UserRecord> userTable = new TableView<>();
+    TableView<TransactionRecord> txTable = new TableView<>();
+    ToggleButton accounts = makeToggle();
+    ToggleButton listings = makeToggle();
+    ToggleButton purchases = makeToggle();
+    Label statusLight = new Label("●");
+    Label timeLabel = new Label();
+    Label userCountLabel = new Label();
+    LineChart<String, Number> salesChart;
+    BarChart<String, Number> txChart;
 
-    public void start(Stage window) {
-        BorderPane mainPane = new BorderPane();
-        mainPane.setStyle("-fx-background-color: #8D2231;");
+    public void start(Stage stage) {
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: #8D2231;");
 
-        // top bar
         HBox top = new HBox(10);
         top.setPadding(new Insets(5));
         top.setAlignment(Pos.CENTER_LEFT);
-
-        ImageView forkLogo = new ImageView(new Image("file:pngegg.png"));
-        forkLogo.setFitHeight(30);
-        forkLogo.setPreserveRatio(true);
-
-        Label appTitle = new Label("SUN DEVIL TextBooks");
-        appTitle.setFont(Font.font("Arial", 16));
-        appTitle.setTextFill(Color.GOLD);
-
+        ImageView logo = new ImageView(new Image("file:pngegg.png"));
+        logo.setFitHeight(30);
+        logo.setPreserveRatio(true);
+        Label title = new Label("SUN DEVIL TextBooks");
+        title.setFont(Font.font("Arial", 16));
+        title.setTextFill(Color.GOLD);
         Label dateLabel = new Label("Date Range:");
         dateLabel.setTextFill(Color.GOLD);
         DatePicker picker = new DatePicker();
-        Button logoutBtn = new Button("Logout");
+        Button logout = new Button("Logout");
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        top.getChildren().addAll(logo, title, spacer, dateLabel, picker, logout);
+        root.setTop(top);
 
-        Region growSpacer = new Region();
-        HBox.setHgrow(growSpacer, Priority.ALWAYS);
-
-        top.getChildren().addAll(forkLogo, appTitle, growSpacer, dateLabel, picker, logoutBtn);
-        mainPane.setTop(top);
-
-        // middle section
-        GridPane mid = new GridPane();
-        mid.setPadding(new Insets(5));
-        mid.setHgap(5);
-        mid.setVgap(5);
-
-        initUserTable();
-        initTransactionTable();
+        initUsers();
+        initTx();
 
         VBox userBox = new VBox(new Label("User Accounts"), userTable);
-        VBox txBox = new VBox(new Label("Transactions"), transactionTable);
+        VBox txBox = new VBox(new Label("Transactions"), txTable);
         userBox.setStyle("-fx-background-color: #FFD700;");
         txBox.setStyle("-fx-background-color: #FFD700;");
-        userBox.setPrefWidth(250);
-        txBox.setPrefWidth(250);
+        userBox.setPrefWidth(300);
+        txBox.setPrefWidth(300);
+        userTable.setPrefHeight(150);
+        txTable.setPrefHeight(150);
 
-        VBox configPanel = new VBox(5);
-        configPanel.getChildren().addAll(makeToggleBox("Allow New Accounts", accountsToggle),
-                                         makeToggleBox("Allow New Listings", listingsToggle),
-                                         makeToggleBox("Allow Purchases", purchasesToggle));
-        configPanel.setPadding(new Insets(5));
-        configPanel.setStyle("-fx-background-color: #B0B0B0; -fx-border-color: black; -fx-border-width: 1px;");
+        salesChart = chartLine("Buying vs. Selling");
+        txChart = chartBar("Transactions Per Day");
+        salesChart.setPrefSize(320, 150);
+        txChart.setPrefSize(320, 150);
 
-        salesLineChart = makeLineChart("Buying vs. Selling");
-        barChart = makeBarChart("Transactions Per Day");
-        salesLineChart.setPrefSize(300, 120);
-        barChart.setPrefSize(300, 120);
+        HBox chartsRow = new HBox(10, salesChart, txChart);
+        chartsRow.setAlignment(Pos.CENTER);
 
-        mid.add(userBox, 0, 0);
-        mid.add(txBox, 1, 0);
-        mid.add(configPanel, 0, 1);
-        mid.add(salesLineChart, 1, 1);
-        mid.add(barChart, 1, 2);
+        HBox tablesRow = new HBox(10, userBox, txBox);
+        tablesRow.setAlignment(Pos.CENTER);
 
-        // footer
-        HBox footer = new HBox(10);
-        footer.setPadding(new Insets(5));
-        footer.setAlignment(Pos.CENTER_LEFT);
+        VBox midLayout = new VBox(10, tablesRow, chartsRow);
+        midLayout.setPadding(new Insets(10));
+        midLayout.setAlignment(Pos.CENTER);
+        root.setCenter(midLayout);
 
-        clockLabel.setTextFill(Color.WHITE);
-        activeUserCountLabel.setTextFill(Color.WHITE);
+        HBox toggles = new HBox(20);
+        toggles.setAlignment(Pos.CENTER);
+        toggles.setPadding(new Insets(10));
+        toggles.getChildren().addAll(toggleBox("Allow New Accounts", accounts),
+                                     toggleBox("Allow New Listings", listings),
+                                     toggleBox("Allow Purchases", purchases));
+        toggles.setStyle("-fx-background-color: #B0B0B0; -fx-border-color: black; -fx-border-width: 1px;");
+
+        HBox bottom = new HBox(10);
+        bottom.setPadding(new Insets(5));
+        bottom.setAlignment(Pos.CENTER_LEFT);
+
+        timeLabel.setTextFill(Color.WHITE);
+        userCountLabel.setTextFill(Color.WHITE);
         statusLight.setTextFill(Color.LIME);
 
-        Label statusText = new Label("System Status:");
-        statusText.setTextFill(Color.WHITE);
-        Region footerSpacer = new Region();
-        HBox.setHgrow(footerSpacer, Priority.ALWAYS);
-        Label activeUsersDisplay = new Label();
-        activeUsersDisplay.setTextFill(Color.WHITE);
-        activeUsersDisplay.textProperty().bind(activeUserCountLabel.textProperty());
+        Label sysStatus = new Label("System Status:");
+        sysStatus.setTextFill(Color.WHITE);
+        Region bottomSpacer = new Region();
+        HBox.setHgrow(bottomSpacer, Priority.ALWAYS);
+        Label userDisplay = new Label();
+        userDisplay.setTextFill(Color.WHITE);
+        userDisplay.textProperty().bind(userCountLabel.textProperty());
 
-        footer.getChildren().addAll(clockLabel, footerSpacer, activeUsersDisplay, statusText, statusLight);
+        bottom.getChildren().addAll(timeLabel, bottomSpacer, userDisplay, sysStatus, statusLight);
 
-        mainPane.setCenter(mid);
-        mainPane.setBottom(footer);
+        VBox footer = new VBox(toggles, bottom);
+        root.setBottom(footer);
 
-        loadData();
+        pullTxtFiles();
 
-        Scene scene = new Scene(mainPane, 700, 450);
-        window.setScene(scene);
-        window.setTitle("Admin View");
-        window.show();
+        Scene scene = new Scene(root, 720, 540);
+        stage.setScene(scene);
+        stage.setTitle("Admin View");
+        stage.show();
     }
 
-    private void initUserTable() {
-        TableColumn<UserRecord, String> nameCol = new TableColumn<>("Username");
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
-        userTable.getColumns().add(nameCol);
-        userTable.setPrefHeight(120);
+    void initUsers() {
+        TableColumn<UserRecord, String> name = new TableColumn<>("Username");
+        name.setCellValueFactory(new PropertyValueFactory<>("username"));
+        TableColumn<UserRecord, String> type = new TableColumn<>("User Type");
+        type.setCellValueFactory(new PropertyValueFactory<>("type"));
+        userTable.getColumns().addAll(name, type);
+        userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    private void initTransactionTable() {
-        TableColumn<TransactionRecord, String> isbn = new TableColumn<>("ISBN");
-        TableColumn<TransactionRecord, String> email = new TableColumn<>("Email");
+    void initTx() {
         TableColumn<TransactionRecord, String> title = new TableColumn<>("Textbook Name");
-
-        isbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
-        email.setCellValueFactory(new PropertyValueFactory<>("email"));
+        TableColumn<TransactionRecord, String> price = new TableColumn<>("Price");
         title.setCellValueFactory(new PropertyValueFactory<>("title"));
-
-        transactionTable.getColumns().addAll(isbn, email, title);
-        transactionTable.setPrefHeight(120);
+        price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        txTable.getColumns().addAll(title, price);
     }
 
-    private HBox makeToggleBox(String labelText, ToggleButton toggle) {
-        Label label = new Label(labelText);
+    HBox toggleBox(String text, ToggleButton toggle) {
+        Label label = new Label(text);
         label.setTextFill(Color.BLACK);
-        toggle.selectedProperty().addListener((obs, was, now) -> {
-            if (now) toggle.setStyle("-fx-background-color: green; -fx-text-fill: white;");
+        toggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) toggle.setStyle("-fx-background-color: green; -fx-text-fill: white;");
             else toggle.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         });
         toggle.setSelected(false);
-        HBox box = new HBox(5, label, toggle);
-        box.setAlignment(Pos.CENTER_LEFT);
-        return box;
+        HBox row = new HBox(5, label, toggle);
+        row.setAlignment(Pos.CENTER_LEFT);
+        return row;
     }
 
-    private static ToggleButton makeToggle() {
-        ToggleButton btn = new ToggleButton("OFF");
-        btn.selectedProperty().addListener((obs, oldV, newV) -> btn.setText(newV ? "ON" : "OFF"));
-        return btn;
+    static ToggleButton makeToggle() {
+        ToggleButton b = new ToggleButton("OFF");
+        b.selectedProperty().addListener((obs, o, n) -> b.setText(n ? "ON" : "OFF"));
+        return b;
     }
 
-    private LineChart<String, Number> makeLineChart(String title) {
+    LineChart<String, Number> chartLine(String title) {
         CategoryAxis x = new CategoryAxis();
         NumberAxis y = new NumberAxis();
-        LineChart<String, Number> chart = new LineChart<>(x, y);
-        chart.setTitle(title);
-        return chart;
+        LineChart<String, Number> line = new LineChart<>(x, y);
+        line.setTitle(title);
+        return line;
     }
 
-    private BarChart<String, Number> makeBarChart(String title) {
+    BarChart<String, Number> chartBar(String title) {
         CategoryAxis x = new CategoryAxis();
         NumberAxis y = new NumberAxis();
-        BarChart<String, Number> chart = new BarChart<>(x, y);
-        chart.setTitle(title);
-        return chart;
+        BarChart<String, Number> bar = new BarChart<>(x, y);
+        bar.setTitle(title);
+        return bar;
     }
 
-    private void loadData() {
+    void pullTxtFiles() {
         try {
-            List<String> userLines = Files.readAllLines(Paths.get("usernames.txt"));
-            List<UserRecord> users = userLines.stream().map(UserRecord::new).collect(Collectors.toList());
+            InputStream input = getClass().getResourceAsStream("/bookstore/usernames.txt");
+            if (input == null) throw new FileNotFoundException("Could not find usernames.txt in resources.");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            List<UserRecord> users = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length >= 3) users.add(new UserRecord(parts[0], parts[2]));
+            }
+            reader.close();
             userTable.getItems().setAll(users);
-            activeUserCountLabel.setText("Active Users: " + users.size());
+            userTable.refresh();
+            userCountLabel.setText("Active Users: " + users.size());
 
-            List<String> txLines = Files.readAllLines(Paths.get("transactions.txt"));
-            List<TransactionRecord> tx = txLines.stream().map(TransactionRecord::fromLine).filter(Objects::nonNull).collect(Collectors.toList());
-            transactionTable.getItems().setAll(tx);
+            InputStream txInput = getClass().getResourceAsStream("/bookstore/transactions.txt");
+            if (txInput == null) throw new FileNotFoundException("Could not find transactions.txt in resources.");
+            BufferedReader txReader = new BufferedReader(new InputStreamReader(txInput));
+            List<TransactionRecord> txs = new ArrayList<>();
+            while ((line = txReader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length >= 2) txs.add(new TransactionRecord(parts[0], parts[1]));
+            }
+            txReader.close();
+            txTable.getItems().setAll(txs);
 
-            clockLabel.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd, yyyy - hh:mm a")));
+            timeLabel.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd, yyyy - hh:mm a")));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -197,26 +203,20 @@ public class AdminView {
 
     public static class UserRecord {
         private final String username;
-        public UserRecord(String u) { this.username = u; }
+        private final String type;
+        public UserRecord(String u, String t) { username = u; type = t; }
         public String getUsername() { return username; }
+        public String getType() { return type; }
     }
 
     public static class TransactionRecord {
-        private final String isbn, email, title;
-        public TransactionRecord(String isbn, String email, String title) {
-            this.isbn = isbn;
-            this.email = email;
-            this.title = title;
+        private final String title;
+        private final String price;
+        public TransactionRecord(String t, String p) {
+            title = t;
+            price = p;
         }
-
-        public static TransactionRecord fromLine(String line) {
-            String[] parts = line.split(",");
-            if (parts.length < 3) return null;
-            return new TransactionRecord(parts[0], parts[1], parts[2]);
-        }
-
-        public String getIsbn() { return isbn; }
-        public String getEmail() { return email; }
         public String getTitle() { return title; }
+        public String getPrice() { return price; }
     }
 }
