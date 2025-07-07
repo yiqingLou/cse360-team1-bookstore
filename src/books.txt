@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-1,1,Novel,Like New
-=======
 Data Structures,Smith,12.50,Worn,CSE360
 Java Programming,Lee,9.99,Acceptable,CSE205
 Python Crash Course,Eric,13.75,Used,CSE110
@@ -26,4 +23,3 @@ Ethical Hacking,Harris,19.75,Worn,CSE465
 Quantum Computing,Nielsen,39.95,New,CSE498
 UX Design,Norman,11.60,Acceptable,CSE320
 Data Mining,Han,24.99,Used,CSE450
->>>>>>> 2b964bee6c9ea3db827c76cf154b48037a00e087
