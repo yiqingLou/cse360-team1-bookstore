@@ -76,3 +76,74 @@
 	-fx-pref-width: 200px;
 	-fx-pref-height: 200px;
 }
+
+.checkout{
+	-fx-background-color: #8c1d40;
+	-fx-text-fill: white;
+	-fx-padding: 8px;
+	-fx-spacing: 30;
+	-fx-pref-width: 600px;
+	-fx-pref-height: 800px;
+	-fx-font-family: "Segoe UI", sans-serif;
+	-fx-alignment: center;
+}
+
+.checkbooks{
+	-fx-background-color: #FCFCFC;
+	-fx-text-fill: black;
+	-fx-border-color: black;
+	-fx-border-width: 3;
+	-fx-background-radius: 10;
+	-fx-padding: 8px;
+	-fx-spacing: 30;
+	-fx-pref-width: 300px;
+	-fx-pref-height: 500px;
+	-fx-font-family: "Segoe UI", sans-serif;
+	-fx-alignment: center;
+}
+
+.checkout-label {
+    -fx-background-color: #8c1d40;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 8;
+}
+
+.checkoutbutton {
+    -fx-background-color: #660000;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 8;
+    -fx-pref-width: 400px;
+	-fx-pref-height: 60px;
+	-fx-font-size: 20px;
+    
+}
+
+.checkoutbutton:hover {
+    -fx-background-color: #a1264f;
+}
+
+.cartItem{
+	-fx-text-fill: #660000;
+	-fx-alignment: center;
+	-fx-font-size: 20px; 
+	-fx-font-weight: bold;
+}
+
+.cout{
+	-fx-font-size: 30px; 
+	-fx-font-weight: bold;
+	-fx-text-fill: #FFC300;
+	
+}
+.total2{
+	-fx-font-size: 30px; 
+	-fx-font-weight: bold;
+	-fx-text-fill: #F5C518;
+	
+}
