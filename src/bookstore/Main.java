@@ -1,17 +1,26 @@
 package bookstore;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("BookManagerView.fxml"));
-        Scene scene = new Scene(loader.load(), 600, 400);
+    public void start(Stage primaryStage) {
+        VBox root = new VBox(10);
+        Button adminBtn = new Button("Admin Login");
+
+        adminBtn.setOnAction(e -> {
+            AdminView admin = new AdminView();
+            admin.start(new Stage());
+        });
+
+        root.getChildren().addAll(adminBtn); // 你可以加 buyer/seller 入口
+        Scene scene = new Scene(root, 400, 300);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Book Management");
+        primaryStage.setTitle("Bookstore Main Menu");
         primaryStage.show();
     }
 
