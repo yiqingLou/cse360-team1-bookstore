@@ -13,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -63,8 +64,8 @@ public class AdminView {
         userTable.setPrefHeight(150);
         bookTable.setPrefHeight(150);
 
-        salesChart = chartLine("Buying vs. Selling");
-        txChart = chartBar("Transactions Per Day");
+        salesChart = chartLine("Books Sold");
+        txChart = chartBar("Sales by Price");
         salesChart.setPrefSize(320, 150);
         txChart.setPrefSize(320, 150);
 
@@ -109,6 +110,12 @@ public class AdminView {
         root.setBottom(footer);
 
         pullTxtFiles();
+        
+        salesChart.lookupAll(".axis-label").forEach(n -> n.setStyle("-fx-text-fill: white;"));
+        txChart.lookupAll(".axis-label").forEach(n -> n.setStyle("-fx-text-fill: white;"));
+        salesChart.lookupAll(".tick-label").forEach(n -> n.setStyle("-fx-text-fill: white;"));
+        txChart.lookupAll(".tick-label").forEach(n -> n.setStyle("-fx-text-fill: white;"));
+
 
         Scene scene = new Scene(root, 800, 560);
         stage.setScene(scene);
@@ -160,25 +167,25 @@ public class AdminView {
 
     LineChart<String, Number> chartLine(String title) {
         CategoryAxis x = new CategoryAxis();
-        NumberAxis y = new NumberAxis();
+        NumberAxis y = new NumberAxis(0, 10, 1);
         LineChart<String, Number> line = new LineChart<>(x, y);
         line.setTitle(title);
+        line.setAnimated(false);
         return line;
     }
 
     BarChart<String, Number> chartBar(String title) {
         CategoryAxis x = new CategoryAxis();
-        NumberAxis y = new NumberAxis();
+        NumberAxis y = new NumberAxis(0, 10, 1);
         BarChart<String, Number> bar = new BarChart<>(x, y);
         bar.setTitle(title);
+        bar.setAnimated(false);
         return bar;
     }
 
     void pullTxtFiles() {
         try {
-            InputStream input = getClass().getResourceAsStream("/bookstore/usernames.txt");
-            if (input == null) throw new FileNotFoundException("Could not find usernames.txt in resources.");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            BufferedReader reader = new BufferedReader(new FileReader("src/usernames.txt"));
             List<UserRecord> users = new ArrayList<>();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -190,9 +197,7 @@ public class AdminView {
             userTable.refresh();
             userCountLabel.setText("Active Users: " + users.size());
 
-            InputStream booksInput = getClass().getResourceAsStream("/bookstore/books.txt");
-            if (booksInput == null) throw new FileNotFoundException("Could not find books.txt in resources.");
-            BufferedReader bookReader = new BufferedReader(new InputStreamReader(booksInput));
+            BufferedReader bookReader = new BufferedReader(new FileReader("src/books.txt"));
             List<BookRecord> books = new ArrayList<>();
             while ((line = bookReader.readLine()) != null) {
                 String[] parts = line.split(",");
@@ -201,11 +206,52 @@ public class AdminView {
             bookReader.close();
             bookTable.getItems().setAll(books);
 
+            BufferedReader txReader = new BufferedReader(new FileReader("src/transactions.txt"));
+            Map<String, Integer> soldCount = new HashMap<>();
+            Map<String, Integer> priceRanges = new TreeMap<>();
+            while ((line = txReader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    String title = parts[0];
+                    double price = Double.parseDouble(parts[1]);
+                    soldCount.put(title, soldCount.getOrDefault(title, 0) + 1);
+                    String range = "$" + (int)(price / 10) * 10 + "+";
+                    priceRanges.put(range, priceRanges.getOrDefault(range, 0) + 1);
+                }
+            }
+            txReader.close();
+
+            salesChart.getData().clear();
+            txChart.getData().clear();
+
+            XYChart.Series<String, Number> soldSeries = new XYChart.Series<>();
+            soldSeries.setName("Sold Titles");
+            for (Map.Entry<String, Integer> e : soldCount.entrySet()) {
+                soldSeries.getData().add(new XYChart.Data<>(e.getKey(), e.getValue()));
+            }
+            salesChart.getData().add(soldSeries);
+
+            XYChart.Series<String, Number> priceSeries = new XYChart.Series<>();
+            priceSeries.setName("Price Brackets");
+            for (Map.Entry<String, Integer> e : priceRanges.entrySet()) {
+                priceSeries.getData().add(new XYChart.Data<>(e.getKey(), e.getValue()));
+            }
+            txChart.getData().add(priceSeries);
+            
+            salesChart.lookupAll(".chart-title").forEach(n -> n.setStyle("-fx-text-fill: white;"));
+            txChart.lookupAll(".chart-title").forEach(n -> n.setStyle("-fx-text-fill: white;"));
+            salesChart.lookupAll(".axis-label").forEach(n -> n.setStyle("-fx-text-fill: white;"));
+            txChart.lookupAll(".axis-label").forEach(n -> n.setStyle("-fx-text-fill: white;"));
+            salesChart.lookupAll(".tick-label").forEach(n -> n.setStyle("-fx-text-fill: white;"));
+            txChart.lookupAll(".tick-label").forEach(n -> n.setStyle("-fx-text-fill: white;"));
+
+
             timeLabel.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd, yyyy - hh:mm a")));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
+
 
     public static class UserRecord {
         private final String username;
