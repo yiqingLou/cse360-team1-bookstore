@@ -11,10 +11,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-<<<<<<< HEAD
-import javafx.fxml.FXMLLoader;
-=======
->>>>>>> 3236a78a72db3b0f08e8d3a75e39904625e72d98
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -23,7 +19,7 @@ import java.util.*;
 
 public class AdminView {
     TableView<UserRecord> userTable = new TableView<>();
-    TableView<TransactionRecord> txTable = new TableView<>();
+    TableView<BookRecord> bookTable = new TableView<>();
     ToggleButton accounts = makeToggle();
     ToggleButton listings = makeToggle();
     ToggleButton purchases = makeToggle();
@@ -46,38 +42,26 @@ public class AdminView {
         Label title = new Label("SUN DEVIL TextBooks");
         title.setFont(Font.font("Arial", 16));
         title.setTextFill(Color.GOLD);
-
-
-        Button manageBooksBtn = new Button("Manage Books");
-        manageBooksBtn.setStyle("-fx-background-color: #FFD700; -fx-border-radius: 5; -fx-background-radius: 5;");
-        manageBooksBtn.setOnAction(e -> openBookManager(new Stage()));
-
-
         Label dateLabel = new Label("Date Range:");
         dateLabel.setTextFill(Color.GOLD);
         DatePicker picker = new DatePicker();
         Button logout = new Button("Logout");
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-
-
-        top.getChildren().addAll(logo, title, manageBooksBtn, spacer, dateLabel, picker, logout);
-
         top.getChildren().addAll(logo, title, spacer, dateLabel, picker, logout);
-
         root.setTop(top);
 
         initUsers();
-        initTx();
+        initBooks();
 
         VBox userBox = new VBox(new Label("User Accounts"), userTable);
-        VBox txBox = new VBox(new Label("Transactions"), txTable);
+        VBox bookBox = new VBox(new Label("Available Books"), bookTable);
         userBox.setStyle("-fx-background-color: #FFD700;");
-        txBox.setStyle("-fx-background-color: #FFD700;");
+        bookBox.setStyle("-fx-background-color: #FFD700;");
         userBox.setPrefWidth(300);
-        txBox.setPrefWidth(300);
+        bookBox.setPrefWidth(400);
         userTable.setPrefHeight(150);
-        txTable.setPrefHeight(150);
+        bookTable.setPrefHeight(150);
 
         salesChart = chartLine("Buying vs. Selling");
         txChart = chartBar("Transactions Per Day");
@@ -87,7 +71,7 @@ public class AdminView {
         HBox chartsRow = new HBox(10, salesChart, txChart);
         chartsRow.setAlignment(Pos.CENTER);
 
-        HBox tablesRow = new HBox(10, userBox, txBox);
+        HBox tablesRow = new HBox(10, userBox, bookBox);
         tablesRow.setAlignment(Pos.CENTER);
 
         VBox midLayout = new VBox(10, tablesRow, chartsRow);
@@ -99,13 +83,8 @@ public class AdminView {
         toggles.setAlignment(Pos.CENTER);
         toggles.setPadding(new Insets(10));
         toggles.getChildren().addAll(toggleBox("Allow New Accounts", accounts),
-<<<<<<< HEAD
-                toggleBox("Allow New Listings", listings),
-                toggleBox("Allow Purchases", purchases));
-=======
                                      toggleBox("Allow New Listings", listings),
                                      toggleBox("Allow Purchases", purchases));
->>>>>>> 3236a78a72db3b0f08e8d3a75e39904625e72d98
         toggles.setStyle("-fx-background-color: #B0B0B0; -fx-border-color: black; -fx-border-width: 1px;");
 
         HBox bottom = new HBox(10);
@@ -131,42 +110,33 @@ public class AdminView {
 
         pullTxtFiles();
 
-        Scene scene = new Scene(root, 720, 540);
+        Scene scene = new Scene(root, 800, 560);
         stage.setScene(scene);
         stage.setTitle("Admin View");
         stage.show();
     }
 
-<<<<<<< HEAD
-    private void openBookManager(Stage stage) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("BookManagerView.fxml"));
-            Scene scene = new Scene(loader.load(), 600, 400);
-            stage.setScene(scene);
-            stage.setTitle("Book Management");
-            stage.show();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-=======
->>>>>>> 3236a78a72db3b0f08e8d3a75e39904625e72d98
     void initUsers() {
         TableColumn<UserRecord, String> name = new TableColumn<>("Username");
         name.setCellValueFactory(new PropertyValueFactory<>("username"));
-        TableColumn<UserRecord, String> type = new TableColumn<>("User Type");
-        type.setCellValueFactory(new PropertyValueFactory<>("type"));
-        userTable.getColumns().addAll(name, type);
+        TableColumn<UserRecord, String> pass = new TableColumn<>("Password");
+        pass.setCellValueFactory(new PropertyValueFactory<>("password"));
+        userTable.getColumns().addAll(name, pass);
         userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    void initTx() {
-        TableColumn<TransactionRecord, String> title = new TableColumn<>("Textbook Name");
-        TableColumn<TransactionRecord, String> price = new TableColumn<>("Price");
+    void initBooks() {
+        TableColumn<BookRecord, String> title = new TableColumn<>("Title");
+        TableColumn<BookRecord, String> author = new TableColumn<>("Author");
+        TableColumn<BookRecord, String> price = new TableColumn<>("Price");
+        TableColumn<BookRecord, String> condition = new TableColumn<>("Condition");
+        TableColumn<BookRecord, String> course = new TableColumn<>("Course");
         title.setCellValueFactory(new PropertyValueFactory<>("title"));
+        author.setCellValueFactory(new PropertyValueFactory<>("author"));
         price.setCellValueFactory(new PropertyValueFactory<>("price"));
-        txTable.getColumns().addAll(title, price);
+        condition.setCellValueFactory(new PropertyValueFactory<>("condition"));
+        course.setCellValueFactory(new PropertyValueFactory<>("course"));
+        bookTable.getColumns().addAll(title, author, price, condition, course);
     }
 
     HBox toggleBox(String text, ToggleButton toggle) {
@@ -213,23 +183,23 @@ public class AdminView {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(":");
-                if (parts.length >= 3) users.add(new UserRecord(parts[0], parts[2]));
+                if (parts.length == 2) users.add(new UserRecord(parts[0], parts[1]));
             }
             reader.close();
             userTable.getItems().setAll(users);
             userTable.refresh();
             userCountLabel.setText("Active Users: " + users.size());
 
-            InputStream txInput = getClass().getResourceAsStream("/bookstore/transactions.txt");
-            if (txInput == null) throw new FileNotFoundException("Could not find transactions.txt in resources.");
-            BufferedReader txReader = new BufferedReader(new InputStreamReader(txInput));
-            List<TransactionRecord> txs = new ArrayList<>();
-            while ((line = txReader.readLine()) != null) {
-                String[] parts = line.split(":");
-                if (parts.length >= 2) txs.add(new TransactionRecord(parts[0], parts[1]));
+            InputStream booksInput = getClass().getResourceAsStream("/bookstore/books.txt");
+            if (booksInput == null) throw new FileNotFoundException("Could not find books.txt in resources.");
+            BufferedReader bookReader = new BufferedReader(new InputStreamReader(booksInput));
+            List<BookRecord> books = new ArrayList<>();
+            while ((line = bookReader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 5) books.add(new BookRecord(parts[0], parts[1], parts[2], parts[3], parts[4]));
             }
-            txReader.close();
-            txTable.getItems().setAll(txs);
+            bookReader.close();
+            bookTable.getItems().setAll(books);
 
             timeLabel.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd, yyyy - hh:mm a")));
         } catch (IOException ex) {
@@ -239,20 +209,21 @@ public class AdminView {
 
     public static class UserRecord {
         private final String username;
-        private final String type;
-        public UserRecord(String u, String t) { username = u; type = t; }
+        private final String password;
+        public UserRecord(String u, String p) { username = u; password = p; }
         public String getUsername() { return username; }
-        public String getType() { return type; }
+        public String getPassword() { return password; }
     }
 
-    public static class TransactionRecord {
-        private final String title;
-        private final String price;
-        public TransactionRecord(String t, String p) {
-            title = t;
-            price = p;
+    public static class BookRecord {
+        private final String title, author, price, condition, course;
+        public BookRecord(String t, String a, String p, String c, String co) {
+            title = t; author = a; price = p; condition = c; course = co;
         }
         public String getTitle() { return title; }
+        public String getAuthor() { return author; }
         public String getPrice() { return price; }
+        public String getCondition() { return condition; }
+        public String getCourse() { return course; }
     }
 }
