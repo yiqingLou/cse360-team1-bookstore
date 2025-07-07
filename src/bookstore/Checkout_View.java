@@ -34,6 +34,9 @@ public class Checkout_View extends Application{
 	
 	Book[] history;
 	
+	String fileName = "transactions.txt";
+	File file = new File(fileName);
+	
 	public Checkout_View(ObservableList<Book> cart1) {
 		this.cart = cart1;
 		history = new Book[100];
@@ -68,18 +71,23 @@ public class Checkout_View extends Application{
 				Label total2 = new Label("Total Owed - $ " + String.format("%.2f",total));
 				total2.getStyleClass().add("total2");
 				
+				
+				
 				Button purch = new Button("Purchase");
 				purch.getStyleClass().add("checkoutbutton");
 				purch.setOnAction(e -> {
 					
 					//FIXME
-					for(Book book : cart) {
-						int i = 0;
-						while (i < cart.size()){
-							history[i] = cart.get(i);
-							i++;
-						}
-					}
+					try(FileWriter fwrite = new FileWriter("transactions.txt", true)) {
+							for(Book book : cart) {
+								fwrite.write(book.getTitle() + "," + book.getPrice() + "\n");
+								System.out.println("done" + book.getTitle() + "," + book.getPrice());
+							}
+							} catch (IOException exception) {
+								
+							}
+					
+					
 					
 					cart.clear();
 					total2.setText("Thank you for your Purchase!");
